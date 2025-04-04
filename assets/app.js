@@ -23,11 +23,11 @@ const personnes = [
 // sous forme de "cartes" dans la section 1
 
 
-function afficherPersonnes() {
-    const container= document.querySelector("#personnes-container");
+function afficherPersonnes(listePersonnes = personnes) {
+    const container = document.querySelector("#personnes-container");
     container.innerHTML = ""; 
-    personnes.forEach(function(personne) {
-    const cardElement = document.createElement("div");
+    listePersonnes.forEach(function(personne) {
+        const cardElement = document.createElement("div");
         cardElement.classList.add("card");
         cardElement.innerHTML = `
             <h2>${personne.nom}</h2>
@@ -80,6 +80,21 @@ function ajouterPersonne(nom, prenom, age, profession, dateNaissance) {
     document.querySelector("form").reset();
 }
 
+const searchInput = document.getElementById("search");
+
+searchInput.addEventListener("input", function () {
+    const inputValue = searchInput.value.toLowerCase();
+
+    const resultats = personnes.filter(personne => {
+        return (
+        personne.nom.toLowerCase().includes(inputValue) ||
+        personne.prenom.toLowerCase().includes(inputValue) ||
+        personne.age.toString().includes(inputValue) ||
+        personne.profession.toLowerCase().includes(inputValue)
+    );
+    })
+    afficherPersonnes(resultats);
+})
 
 window.onload = afficherPersonnes();
 document.querySelector("form").addEventListener("submit", validerFormulaire);
